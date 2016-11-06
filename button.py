@@ -1,20 +1,23 @@
-### FUNCTIONALITY FOR THE BUTTONS ###
+# FUNCTIONALITY FOR THE BUTTONS ###
 
 ### Setup for the buttons###
 import RPi.GPIO as GPIO
+import time
 
 GPIO.setmode(GPIO.BCM)
-
-GPIO.setup('''leftButtonGPIO''', GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
-GPIO.setup('''rightButtonGPIO''', GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+GPIO.setup(12, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+GPIO.setup(24, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
 
 
 def pressed():
     #Will return which button is pressed as a string
     while True:
-        if GPIO.input('''leftButtonGPIO''') == 1 #If Left is pressed
+        if GPIO.input(12) == GPIO.LOW: #If Left is pressed
             return 'left'
-        if GPIO.input('''rightButtonGPIO''') == 1 #if right is pressed
+        if GPIO.input(24) == GPIO.LOW: #if right is pressed
             return 'right'
     
+while True:
+    print pressed()
+    time.sleep(0.5)

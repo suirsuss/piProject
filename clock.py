@@ -9,7 +9,7 @@ setup(right)
 setup(left)
 
 def timer(digits):
-    ''' Input: 2-digit number.
+    ''' Input: 2-digit number. Must be >= 10.
         Output: returns true if successfully completed '''
 
     strtime = str(digits)

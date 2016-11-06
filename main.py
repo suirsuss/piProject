@@ -48,8 +48,10 @@ def option():
     lcd.clear()
     lcd.message('...')
     if pressed() == 'left':
+        pass
         #Left Button code
     elif pressed() == 'right':
+        pass
         #right button code
 
 
@@ -65,9 +67,9 @@ if __name__ == "__main__":
     lcd.message("## GAME_TITLE ##\nStart    Options")
     #Button functionality here to allow the game to start or whatever
     whichButton = pressed()
-    if whichButton == 'left'
+    if whichButton == 'left':
         play(defaultBundle)
-    elif whichButton == 'right'
+    elif whichButton == 'right':
         newBundle = option()
 
 
