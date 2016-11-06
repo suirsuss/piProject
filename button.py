@@ -17,7 +17,3 @@ def pressed():
             return 'left'
         if GPIO.input(24) == GPIO.LOW: #if right is pressed
             return 'right'
-    
-while True:
-    print pressed()
-    time.sleep(0.5)

@@ -1,3 +1,4 @@
+from picamera import PiCamera
 from clock import timer
 from theme import *
 from button import *
@@ -37,7 +38,18 @@ def play(bundle):
     if result:
         lcd.clear()
         lcd.message("Time's up!")
+        print "taking picture..."
+        camera = PiCamera()
+        camera.start_preview()
         time.sleep(5)
+        camera.capture('/home/pi/piProject/image.jpg')
+        camera.stop_preview()
+        
+        #Send this image to google analysis
+        #Vision('''image''') --> returns result. Saves result if multiplayer
+        #send results back in the findWinner() function
+
+        
 
     if bundle['Players'] == 2:
         lcd.clear()
@@ -63,14 +75,17 @@ def option():
 
 ### LET THE GAME BEGIN ###
 if __name__ == "__main__":
+    #While loop here that will end when the user no longer wants to play.
+    #Returns to initial state.
+    #We don't need to end the code, we can just put it on stand-by.
+
     defaultBundle = startup()
     lcd.message("## GAME_TITLE ##\nStart    Options")
-    #Button functionality here to allow the game to start or whatever
     whichButton = pressed()
     if whichButton == 'left':
+        print "We're gonna play with default!"
         play(defaultBundle)
     elif whichButton == 'right':
-        newBundle = option()
-
-
-    play(newBundle)
+        print "To the option menu!"
+        #newBundle = option()
+        #play(newBundle)

@@ -30,3 +30,5 @@ def timer(digits):
         rightNum = 9
         setValue(str(rightNum), right)
     return True;
+
+
