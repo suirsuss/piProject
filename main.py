@@ -2,6 +2,7 @@ from picamera import PiCamera
 from clock import timer
 from theme import *
 from button import *
+import random
 import Adafruit_CharLCD as LCD
 
 
