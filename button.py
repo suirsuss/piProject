@@ -14,6 +14,8 @@ def pressed():
     #Will return which button is pressed as a string
     while True:
         if GPIO.input(12) == GPIO.LOW: #If Left is pressed
+            time.sleep(0.25)
             return 'left'
         if GPIO.input(24) == GPIO.LOW: #if right is pressed
+            time.sleep(0.25)
             return 'right'

@@ -23,17 +23,17 @@ lcd = LCD.Adafruit_CharLCD(lcd_rs, lcd_en, lcd_d4, lcd_d5, lcd_d6, lcd_d7,
 
 def startup():
     #Returns a default bundle that will be passed into the play function
-    return {'Theme': 'Animals', 'Time' : 15, 'Players' : 1}
+    return {'Difficulty': 'Medium', 'Players' : 1}
 
 def play(bundle):
     #Takes in a bundle that will be used as the paramaters of the game
     #API & Other functionality will be encapsulated in here
-    Theme = bundle['Theme']
-    Topic = getTopic(Theme)
     lcd.clear()
-    lcd.message(Topic)
-
-    result = timer(bundle['Time'])
+    lcd.message('Let the game\nbegin!!')
+    time.sleep(2)
+    lcd.clear()
+    lcd.message('Emotion')
+    result = timer(10)
 
 
     if result:
@@ -42,7 +42,7 @@ def play(bundle):
         print "taking picture..."
         camera = PiCamera()
         camera.start_preview()
-        time.sleep(5)
+        time.sleep(2)
         camera.capture('/home/pi/piProject/image.jpg')
         camera.stop_preview()
         
@@ -59,17 +59,41 @@ def play(bundle):
 def option():
     #Modifies and returns a non-default bundle for different gamemodes
     lcd.clear()
-    lcd.message('...')
+    lcd.message("Option Menu")
+    time.sleep(2)
+    lcd.clear()
+    lcd.message("Difficulty\nEasy        Next")
+    if pressed() == 'right':
+        lcd.clear()
+        lcd.message("Difficulty\nMedium      Next")
+        if pressed() == 'right':
+            lcd.clear()
+            lcd.message("Difficulty\nHard        Back")
+            if pressed() == 'left':
+                difficulty = 'Hard'
+            elif pressed() == 'right':
+                difficulty = 'Medium'
+        elif pressed() == 'left':
+            difficulty = 'Medium'
+    elif pressed() == 'left':
+        difficulty = 'Easy'
+        lcd.clear()
+    lcd.message('Players\nOne          Two')
     if pressed() == 'left':
-        pass
-        #Left Button code
+         players = 1
     elif pressed() == 'right':
-        pass
-        #right button code
+         players = 2
+    lcd.clear()
+    lcd.message("Difficulty:    %s\nPlayers:       %s" % (difficulty[0], players))
+    time.sleep(3)
+    lcd.clear()
+    lcd.message("Options Saved")
 
 
-    newBundle = {'Theme' : '...', 'Time' : '...', 'Players' : '...'}
+    newBundle = {'Difficulty' : difficulty, 'Players' : players}
     return newBundle #To be passed into play.
+
+
 
 
 
@@ -79,7 +103,6 @@ if __name__ == "__main__":
     #While loop here that will end when the user no longer wants to play.
     #Returns to initial state.
     #We don't need to end the code, we can just put it on stand-by.
-
     defaultBundle = startup()
     lcd.message("## GAME_TITLE ##\nStart    Options")
     whichButton = pressed()
@@ -88,5 +111,7 @@ if __name__ == "__main__":
         play(defaultBundle)
     elif whichButton == 'right':
         print "To the option menu!"
-        #newBundle = option()
-        #play(newBundle)
+        bundle = option()
+        play(bundle)
+    
+
