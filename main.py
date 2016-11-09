@@ -25,6 +25,9 @@ def startup():
     #Returns a default bundle that will be passed into the play function
     return {'Difficulty': 'Medium', 'Players' : 1}
 
+def analyze(playernum):
+    return 0
+
 def play(bundle):
     #Takes in a bundle that will be used as the paramaters of the game
     #API & Other functionality will be encapsulated in here
@@ -32,9 +35,9 @@ def play(bundle):
     lcd.message('Let the game\nbegin!!')
     time.sleep(2)
     lcd.clear()
-    lcd.message('Emotion')
+    emotion = getTopic(bundle['Difficulty'])
+    lcd.message('%s' % emotion) 
     result = timer(10)
-
 
     if result:
         lcd.clear()
@@ -45,17 +48,15 @@ def play(bundle):
         time.sleep(2)
         camera.capture('/home/pi/piProject/image.jpg')
         camera.stop_preview()
-        
-        #Send this image to google analysis
-        #Vision('''image''') --> returns result. Saves result if multiplayer
-        #send results back in the findWinner() function
 
-        
+        analyze(bundle['Players'])
 
-    if bundle['Players'] == 2:
-        lcd.clear()
-        lcd.message("Player 2 Turn")
+    print "Succesful!"
+    lcd.clear()
+    lcd.message("You can code!!!")
+    return 0
 
+  
 def option():
     #Modifies and returns a non-default bundle for different gamemodes
     lcd.clear()
@@ -78,6 +79,7 @@ def option():
     elif pressed() == 'left':
         difficulty = 'Easy'
         lcd.clear()
+    lcd.clear()
     lcd.message('Players\nOne          Two')
     if pressed() == 'left':
          players = 1

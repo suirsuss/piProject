@@ -1,14 +1,15 @@
 ### FILE FOR ALL THE TYPES OF THEME FOR THE GAME ###
 import random
 
-def getTopic(theme):
+def getTopic(difficulty):
     #This code will randomly get the type of topic you want based on the theme
 
-    All = {'nature' : ['Dog', 'Cat', 'Hamster', 'Butterfly', 'Flower', '...'],
-           'animals' : ['Lion', 'Zebra', '...']
+    All = {'easy' : ['Happy','Sad','Mad', 'Surprised'],
+           'medium' : ['Med1', 'Med2', 'Med3'],
+           'hard':[ 'Hard1', 'Hard2', 'Hard3'] }
            #...etc...#
-           }
-    items = All[theme.lower()]
+
+    items = All[difficulty.lower()]
     item = random.randint(0,len(items)-1)
 
-    return All[theme.lower()][item]
+    return All[difficulty.lower()][item]
