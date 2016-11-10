@@ -65,7 +65,7 @@ def detect_emotions(face_file, max_results=2):
     for face in faces:
         for i in range(len(faces)):
             emos.append({key: face[key] for key in likelihoods})
-    print(emos)
+    #print(emos)
     return emos
 
 
