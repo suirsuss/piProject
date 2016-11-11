@@ -51,7 +51,11 @@ def play(bundle):
         camera.stop_preview()
         img = '/home/pi/piProject/image.jpg'
         dumo = getFaceData.Main(img, bundle['Players'])
+<<<<<<< HEAD
         reString1 = dumo[0][str(emotion)]
+=======
+        #dumo['joyLikelihood']
+>>>>>>> 4c8727ea35ee92c5a7359d8fa18e7008166b1e20
     print "Successful!"
     lcd.clear()
     lcd.message("You can code!!!")
@@ -93,7 +97,7 @@ def option():
     if pressed() == 'left':
          players = 1
     elif pressed() == 'right':
-         players = 2
+         players = fac2
     lcd.clear()
     lcd.message("Topic:    %s\nPlayers:       %s" % (newTopic, players))
     time.sleep(3)
@@ -104,6 +108,20 @@ def option():
     newBundle = {'Topic' : newTopic, 'Players' : players}
     return newBundle #To be passed into play.
 
+
+def analyze(list):
+    """ takes the list of dictionaries and outputs a message"""
+    grades={'UNKNOWN':'F','VERY_UNLIKELY':'D' 'UNLIKELY''C','POSSIBLE LIKELY':'B', 'VERY_LIKELY':'A'}
+    grade1=list[0][grades[bundle['Topic']]]
+    grade2=list[1][grades[bundle['Topic']]]
+
+    if grade2 >  grade1:
+        lcd.message('Player two wins!')
+    elif grade1 > grade2:
+        lcd.message('Player one wins!')
+    elif  grade1 == grade2:
+        lcd.message('Its a tie! :D ')
+    lcd.message('Scores: Player 1: %s\n Player 2: %s' % (grade1,grade2))
 
 
 ### LET THE GAME BEGIN ###
