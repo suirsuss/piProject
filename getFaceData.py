@@ -18,12 +18,13 @@
 
 import argparse
 import base64
+import os
 
 from googleapiclient import discovery
 from oauth2client.client import GoogleCredentials
 from PIL import Image
 
-
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = '/home/pi/piProject/piProject-f12639f6b426.json'
 
 # [START get_vision_service]
 def get_vision_service():
@@ -63,13 +64,12 @@ def detect_emotions(face_file, max_results=2):
 
     #extract the likelihoods and return as a list of 1 or 2 dictionaries
     for face in faces:
-        for i in range(len(faces)):
-            emos.append({key: face[key] for key in likelihoods})
-    #print(emos)
+        emos.append({key: face[key] for key in likelihoods})
+    print(emos)
     return emos
 
 
-def main(input_filename, max_results):
+def Main(input_filename, max_results):
     with open(input_filename, 'rb') as image:
         faces = detect_emotions(image, max_results)
         print('Found {} face{}'.format(
@@ -89,5 +89,5 @@ if __name__ == '__main__':
         '--max-results', dest='max_results', default=2,
         help='the max results of face detection.')
     args = parser.parse_args()
-
-    main(args.input_image, args.max_results)
+    
+    Main(args.input_image,args.max_results)
