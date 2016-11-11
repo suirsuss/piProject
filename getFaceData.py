@@ -65,20 +65,21 @@ def detect_emotions(face_file, max_results=2):
     #extract the likelihoods and return as a list of 1 or 2 dictionaries
     for face in faces:
         emos.append({key: face[key] for key in likelihoods})
-    print(emos)
+    #print(emos)
     return emos
 
 
 def Main(input_filename, max_results):
     with open(input_filename, 'rb') as image:
         faces = detect_emotions(image, max_results)
-        print('Found {} face{}'.format(
-            len(faces), '' if len(faces) == 1 else 's'))
+        #print('Found {} face{}'.format(
+        #   len(faces), '' if len(faces) == 1 else 's'))
 
 
         # Reset the file pointer, so we can read the file again
         image.seek(0)
         #emotions=face_emotions(faces)
+    return faces
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(

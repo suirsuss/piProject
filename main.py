@@ -51,7 +51,7 @@ def play(bundle):
         camera.stop_preview()
         img = '/home/pi/piProject/image.jpg'
         dumo = getFaceData.Main(img, bundle['Players'])
-        dumo['joyLikelihood']
+        reString1 = dumo[0][str(emotion)]
     print "Successful!"
     lcd.clear()
     lcd.message("You can code!!!")
