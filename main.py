@@ -26,12 +26,59 @@ def startup():
     #Returns a default bundle that will be passed into the play function
     return {'Topic': 'random', 'Players' : 1}
 
-def analyze(playernum):
+def analyze(list,bundle):
+    """ takes the list of dictionaries returned by face
+        data and outputs messages
+        -input is dumo
+        -returns nothing"""
+    grades={'UNKNOWN':'F','VERY_UNLIKELY':'D', 'UNLIKELY':'C','POSSIBLE LIKELY':'B', 'VERY_LIKELY':'A'}
+    grade1=grades[list[0][bundle['Topic']]]
+    
+    print(grade1)
+    if bundle['Players']!=1:  # more than one player
+        grade2=grades[list[1][bundle['Topic']]]
+        
+        if grade2 <  grade1:
+            lcd.message('Player two wins!')
+            
+            time.sleep(2)
+            lcd.clear()
+        elif grade1 < grade2:
+            time.sleep(2)
+            lcd.clear()
+            lcd.message('Player one wins!')
+        elif  grade1 == grade2:
+            time.sleep(2)
+            lcd.clear()
+            lcd.message('Its a tie! :D')
+            time.sleep(3)
+            lcd.clear()
+        lcd.message('Scores: Player 1: %s\n Player 2: %s' % (grade1,grade2))
+
+    else: #one player
+        print('got into the 1 player')
+        
+        lcd.clear()
+        time.sleep(1)
+        lcd.message('Score:  %s' % (grade1))
+        if grade1<='B':
+            time.sleep(5)
+            lcd.clear()
+            lcd.message('Good Job!')
+            time.sleep(3)
+            lcd.clear()
+        else:
+            time.sleep(5)
+            lcd.clear()
+            lcd.message('Not convincing\nTry again!')
+            time.sleep(3)
+            lcd.clear()
+
     return 0
 
 def play(bundle):
     #Takes in a bundle that will be used as the paramaters of the game
-    #API & Other functionality will be encapsulated in here
+    #API & 0ther functionality will be encapsulated in here
     lcd.clear()
     lcd.message('Let the game\nbegin!!')
     time.sleep(2)
@@ -51,14 +98,12 @@ def play(bundle):
         camera.stop_preview()
         img = '/home/pi/piProject/image.jpg'
         dumo = getFaceData.Main(img, bundle['Players'])
-<<<<<<< HEAD
         reString1 = dumo[0][str(emotion)]
-=======
-        #dumo['joyLikelihood']
->>>>>>> 4c8727ea35ee92c5a7359d8fa18e7008166b1e20
+        analyze(dumo,bundle)
+        
     print "Successful!"
     lcd.clear()
-    lcd.message("You can code!!!")
+#    lcd.message("You can code!!!")
     return 0
 
 def getTopic(theme):
@@ -108,20 +153,20 @@ def option():
     newBundle = {'Topic' : newTopic, 'Players' : players}
     return newBundle #To be passed into play.
 
-
-def analyze(list):
-    """ takes the list of dictionaries and outputs a message"""
-    grades={'UNKNOWN':'F','VERY_UNLIKELY':'D' 'UNLIKELY''C','POSSIBLE LIKELY':'B', 'VERY_LIKELY':'A'}
-    grade1=list[0][grades[bundle['Topic']]]
-    grade2=list[1][grades[bundle['Topic']]]
-
-    if grade2 >  grade1:
-        lcd.message('Player two wins!')
-    elif grade1 > grade2:
-        lcd.message('Player one wins!')
-    elif  grade1 == grade2:
-        lcd.message('Its a tie! :D ')
-    lcd.message('Scores: Player 1: %s\n Player 2: %s' % (grade1,grade2))
+def playMore():
+    #determines if we play again
+    #returns bool
+        lcd.clear()
+        lcd.message()
+        time.sleep(3)
+        lcd.clear()
+        lcd.message('Play again?\nYes        No')
+        if pressed() == 'left':
+             return 1
+             lcd.clear()
+        elif pressed() == 'right':
+             return 0
+             lcd.clear()
 
 
 ### LET THE GAME BEGIN ###
@@ -129,15 +174,19 @@ if __name__ == "__main__":
     #While loop here that will end when the user no longer wants to play.
     #Returns to initial state.
     #We don't need to end the code, we can just put it on stand-by.
-    defaultBundle = startup()
-    lcd.message("## GAME_TITLE ##\nStart    Options")
-    whichButton = pressed()
-    if whichButton == 'left':
-        print "We're gonna play with default!"
-        play(defaultBundle)
-    elif whichButton == 'right':
-        print "To the option menu!"
-        bundle = option()
-        play(bundle)
-    
+    again=1
+    while again!=0:
+        defaultBundle = startup()
+        lcd.message("## GAME_TITLE ##\nStart    Options")
+        whichButton = pressed()
+        if whichButton == 'left':
+            print "We're gonna play with default!"
+            play(defaultBundle)
+        elif whichButton == 'right':
+            print "To the option menu!"
+            bundle = option()
+            play(bundle)
+            again=playMore()
+
+        
 
