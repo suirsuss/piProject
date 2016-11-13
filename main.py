@@ -1,5 +1,6 @@
 from picamera import PiCamera
 from clock import timer
+from segment import *
 from theme import *
 from button import *
 import random
@@ -32,8 +33,13 @@ def analyze(list,bundle,emotion):
         data and outputs messages
         -input is dumo
         -returns nothing"""
-    grades={'UNKNOWN':'F','VERY_UNLIKELY':'D', 'UNLIKELY':'C','POSSIBLE LIKELY':'B', 'VERY_LIKELY':'A'}
+    grades={'UNKNOWN':'F','VERY_UNLIKELY':'D', 'UNLIKELY':'C','POSSIBLE':'B', 'VERY_LIKELY':'A'}
+    gradeValue = {'A' : random.randint(90,99), 'B' : random.randint(80,89), 'C' : random.randint(70,79),
+                  'D' : random.randint(60,69), 'F' : random.randint(30, 50) }
+
+
     grade1=grades[list[0][emotion]]
+    grade1V = str(gradeValue[grade1])
     
     print(grade1)
     if bundle['Players']!=1:  # more than one player
@@ -58,6 +64,8 @@ def analyze(list,bundle,emotion):
 
     else: #one player
         print('got into the 1 player')
+        setValue(grade1V[0], left)
+        setValue(grade1V[1], right)
         
         lcd.clear()
         time.sleep(1)
@@ -74,6 +82,8 @@ def analyze(list,bundle,emotion):
             lcd.message('Not convincing\nTry again!')
             time.sleep(3)
             lcd.clear()
+
+    
     return 0
 
 def play(bundle):
@@ -103,6 +113,7 @@ def play(bundle):
         except KeyError:
             lcd.clear()
             lcd.message("Could not detect\nface. Try again.")
+            time.sleep(5)
             print "Key error raised."
             return -1
             
@@ -185,15 +196,13 @@ if __name__ == "__main__":
         lcd.message("## GAME_TITLE ##\nStart    Options")
         whichButton = pressed()
         if whichButton == 'left':
-            print "We're gonna play with default!"
+            print defaultBundle
             play(defaultBundle)
         elif whichButton == 'right':
-            print "To the option menu!"
             bundle = option()
+            print bundle
             play(bundle)
-        print "playmore should pop up!"
         again=playMore()
-        print "again value: ", again
 
         
 
