@@ -21,22 +21,23 @@ GOOGLE_APPLICATION_CREDENTIALS='/home/pi/piProject/piProject-f12639f6b426.json'
 
 lcd = LCD.Adafruit_CharLCD(lcd_rs, lcd_en, lcd_d4, lcd_d5, lcd_d6, lcd_d7,
                            lcd_columns, lcd_rows, lcd_backlight)
+camera = PiCamera()
 
 def startup():
     #Returns a default bundle that will be passed into the play function
     return {'Topic': 'random', 'Players' : 1}
 
-def analyze(list,bundle):
+def analyze(list,bundle,emotion):
     """ takes the list of dictionaries returned by face
         data and outputs messages
         -input is dumo
         -returns nothing"""
     grades={'UNKNOWN':'F','VERY_UNLIKELY':'D', 'UNLIKELY':'C','POSSIBLE LIKELY':'B', 'VERY_LIKELY':'A'}
-    grade1=grades[list[0][bundle['Topic']]]
+    grade1=grades[list[0][emotion]]
     
     print(grade1)
     if bundle['Players']!=1:  # more than one player
-        grade2=grades[list[1][bundle['Topic']]]
+        grade2=grades[list[1][emotion]]
         
         if grade2 <  grade1:
             lcd.message('Player two wins!')
@@ -53,7 +54,7 @@ def analyze(list,bundle):
             lcd.message('Its a tie! :D')
             time.sleep(3)
             lcd.clear()
-        lcd.message('Scores: Player 1: %s\n Player 2: %s' % (grade1,grade2))
+        lcd.message('Scores: Player 1: %s\nPlayer 2: %s' % (grade1,grade2))
 
     else: #one player
         print('got into the 1 player')
@@ -68,12 +69,11 @@ def analyze(list,bundle):
             time.sleep(3)
             lcd.clear()
         else:
-            time.sleep(5)
+            time.sleep(3)
             lcd.clear()
             lcd.message('Not convincing\nTry again!')
             time.sleep(3)
             lcd.clear()
-
     return 0
 
 def play(bundle):
@@ -91,19 +91,23 @@ def play(bundle):
         lcd.clear()
         lcd.message("Time's up!")
         print "taking picture..."
-        camera = PiCamera()
         camera.start_preview()
-        time.sleep(1)
+        time.sleep(2)
         camera.capture('/home/pi/piProject/image.jpg')
         camera.stop_preview()
         img = '/home/pi/piProject/image.jpg'
-        dumo = getFaceData.Main(img, bundle['Players'])
-        reString1 = dumo[0][str(emotion)]
-        analyze(dumo,bundle)
+        try:
+            dumo = getFaceData.Main(img, bundle['Players'])
+            reString1 = dumo[0][str(emotion)]
+            analyze(dumo,bundle, emotion)
+        except KeyError:
+            lcd.clear()
+            lcd.message("Could not detect\nface. Try again.")
+            print "Key error raised."
+            return -1
+            
         
-    print "Successful!"
     lcd.clear()
-#    lcd.message("You can code!!!")
     return 0
 
 def getTopic(theme):
@@ -117,6 +121,7 @@ def getTopic(theme):
   
 def option():
     #Modifies and returns a non-default bundle for different gamemodes
+    newTopic = 'random'
     lcd.clear()
     lcd.message("Option Menu")
     time.sleep(2)
@@ -157,16 +162,15 @@ def playMore():
     #determines if we play again
     #returns bool
         lcd.clear()
-        lcd.message()
-        time.sleep(3)
-        lcd.clear()
         lcd.message('Play again?\nYes        No')
         if pressed() == 'left':
+             lcd.clear()
              return 1
-             lcd.clear()
         elif pressed() == 'right':
-             return 0
              lcd.clear()
+             lcd.message('Goodbye!')
+             
+             return 0
 
 
 ### LET THE GAME BEGIN ###
@@ -176,6 +180,7 @@ if __name__ == "__main__":
     #We don't need to end the code, we can just put it on stand-by.
     again=1
     while again!=0:
+        "Again is true!"
         defaultBundle = startup()
         lcd.message("## GAME_TITLE ##\nStart    Options")
         whichButton = pressed()
@@ -186,7 +191,9 @@ if __name__ == "__main__":
             print "To the option menu!"
             bundle = option()
             play(bundle)
-            again=playMore()
+        print "playmore should pop up!"
+        again=playMore()
+        print "again value: ", again
 
         
 
