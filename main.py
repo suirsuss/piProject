@@ -94,13 +94,13 @@ def play(bundle):
     time.sleep(2)
     lcd.clear()
     emotion = getTopic(bundle['Topic'])
-    if emotion = "surpriseLikelihood":
+    if emotion == "surpriseLikelihood":
         eText = "Be\nSurprised!"
-    if emotion = "angerLikelihood":
+    if emotion == "angerLikelihood":
         eText = "Be\nAngry!"
-    if emotion = "joyLikelihood":
+    if emotion == "joyLikelihood":
         eText = "Be\nHappy!"
-    if emotion = "sorrowLikelihood":
+    if emotion == "sorrowLikelihood":
         eText = "Be\nSad!"
     lcd.message('%s' % eText)
     result = timer(10)
