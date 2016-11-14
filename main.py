@@ -5,7 +5,7 @@ from theme import *
 from button import *
 import random
 import Adafruit_CharLCD as LCD
-import getFaceData 
+import getFaceData
 
 ###=========SET-UP==========###
 lcd_rs        = 23
@@ -40,14 +40,14 @@ def analyze(list,bundle,emotion):
 
     grade1=grades[list[0][emotion]]
     grade1V = str(gradeValue[grade1])
-    
+
     print(grade1)
     if bundle['Players']!=1:  # more than one player
         grade2=grades[list[1][emotion]]
-        
+
         if grade2 <  grade1:
             lcd.message('Player two wins!')
-            
+
             time.sleep(2)
             lcd.clear()
         elif grade1 < grade2:
@@ -66,7 +66,7 @@ def analyze(list,bundle,emotion):
         print('got into the 1 player')
         setValue(grade1V[0], left)
         setValue(grade1V[1], right)
-        
+
         lcd.clear()
         time.sleep(1)
         lcd.message('Score:  %s' % (grade1))
@@ -83,7 +83,7 @@ def analyze(list,bundle,emotion):
             time.sleep(3)
             lcd.clear()
 
-    
+
     return 0
 
 def play(bundle):
@@ -94,7 +94,15 @@ def play(bundle):
     time.sleep(2)
     lcd.clear()
     emotion = getTopic(bundle['Topic'])
-    lcd.message('%s' % emotion) 
+    if emotion = "surpriseLikelihood":
+        eText = "Be\nSurprised!"
+    if emotion = "angerLikelihood":
+        eText = "Be\nAngry!"
+    if emotion = "joyLikelihood":
+        eText = "Be\nHappy!"
+    if emotion = "sorrowLikelihood":
+        eText = "Be\nSad!"
+    lcd.message('%s' % eText)
     result = timer(10)
 
     if result:
@@ -116,8 +124,8 @@ def play(bundle):
             time.sleep(5)
             print "Key error raised."
             return -1
-            
-        
+
+
     lcd.clear()
     return 0
 
@@ -129,7 +137,7 @@ def getTopic(theme):
         return random.choice(All)
 
     return theme
-  
+
 def option():
     #Modifies and returns a non-default bundle for different gamemodes
     newTopic = 'random'
@@ -180,7 +188,7 @@ def playMore():
         elif pressed() == 'right':
              lcd.clear()
              lcd.message('Goodbye!')
-             
+
              return 0
 
 
@@ -203,6 +211,3 @@ if __name__ == "__main__":
             print bundle
             play(bundle)
         again=playMore()
-
-        
-
